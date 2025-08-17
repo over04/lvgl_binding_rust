@@ -1,0 +1,3 @@
+[workspace]
+members = ["lvgl", "lvgl-base", "lvgl-macro", "lvgl-sys"]
+resolver = "3"
