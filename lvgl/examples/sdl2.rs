@@ -14,6 +14,7 @@ fn main() {
             println!("{:?}", event);
         });
         let data = Box::leak(Box::new(1));
+
         unsafe {
             LvObjEventData::on_event(&mut a, EventCode::Released, data, |_, data| {
                 println!("{}", *data);

@@ -8,3 +8,4 @@ pub mod image;
 pub mod part;
 pub mod state;
 pub mod style;
+pub mod grid;

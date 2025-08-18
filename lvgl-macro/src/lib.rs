@@ -1,7 +1,7 @@
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::parse::Parser;
-use syn::{Data, Field, Fields};
+use syn::{Attribute, Data, Field, Fields, parse_quote};
 
 #[proc_macro_attribute]
 pub fn lvgl_obj(_attr: TokenStream, item: TokenStream) -> TokenStream {
@@ -27,6 +27,8 @@ pub fn lvgl_obj(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 .into();
         }
     }
+    let input_struct_attr: Attribute = parse_quote! { #[derive(Default)] };
+    input_struct.attrs.push(input_struct_attr);
     let expanded = quote! {
         impl lvgl_base::obj::LvObjPtr for #struct_name {
             fn as_ptr(&self) -> *mut lvgl_sys::lv_obj_t {
@@ -42,12 +44,16 @@ pub fn lvgl_obj(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 unsafe {
                     Self {
                         _lv_obj_ptr: lvgl_sys::lv_obj_create(parent.as_ptr()),
+                        ..Default::default()
                     }
                 }
             }
 
             fn from_raw(raw: *mut lvgl_sys::lv_obj_t) -> Self {
-                Self { _lv_obj_ptr: raw }
+                Self {
+                    _lv_obj_ptr: raw,
+                    ..Default::default()
+                }
             }
         }
 

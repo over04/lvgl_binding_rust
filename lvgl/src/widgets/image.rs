@@ -10,9 +10,12 @@ use lvgl_sys::{
 use std::ffi::CString;
 
 #[lvgl_obj]
-pub struct Image {}
+pub struct Image {
+    src: Option<ImageSrc>,
+}
 impl Image {
     pub fn set_src(&mut self, src: ImageSrc) -> &mut Self {
+        self.src = Some(src.clone());
         match src {
             ImageSrc::Path(path) => {
                 let path = CString::new(path).unwrap();

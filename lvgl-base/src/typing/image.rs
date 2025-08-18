@@ -1,5 +1,6 @@
 use std::ffi::c_void;
 
+#[derive(Debug, Clone)]
 pub enum ImageSrc {
     Path(String),
     Symbol(String),
