@@ -1,4 +1,5 @@
-use std::ffi::c_void;
+use alloc::string::String;
+use core::ffi::c_void;
 
 #[derive(Debug, Clone)]
 pub enum ImageSrc {

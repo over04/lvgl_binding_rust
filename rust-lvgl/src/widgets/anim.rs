@@ -1,3 +1,5 @@
+use alloc::boxed::Box;
+use core::ffi::c_void;
 use rust_lvgl_base::typing::anim::{AnimCompletedCb, AnimExecCb, AnimRepeat};
 use rust_lvgl_base::typing::anim::{AnimData, AnimSetting};
 use rust_lvgl_sys::{
@@ -5,7 +7,6 @@ use rust_lvgl_sys::{
     lv_anim_set_repeat_count, lv_anim_set_reverse_duration, lv_anim_set_user_data, lv_anim_set_var,
     lv_anim_start, lv_anim_t,
 };
-use std::ffi::c_void;
 
 pub struct Anim {
     anim: lv_anim_t,

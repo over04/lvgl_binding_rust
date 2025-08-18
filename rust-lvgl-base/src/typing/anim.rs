@@ -1,3 +1,4 @@
+use alloc::boxed::Box;
 use rust_lvgl_sys::{
     lv_anim_path_bounce, lv_anim_path_cb_t, lv_anim_path_custom_bezier3, lv_anim_path_ease_in,
     lv_anim_path_ease_in_out, lv_anim_path_ease_out, lv_anim_path_linear, lv_anim_path_overshoot,

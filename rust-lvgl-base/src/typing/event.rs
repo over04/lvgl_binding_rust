@@ -1,8 +1,8 @@
 #![allow(unsafe_op_in_unsafe_fn)]
 
+use core::ffi::c_void;
+use core::fmt::Debug;
 use rust_lvgl_sys::{lv_event_get_code, lv_event_get_user_data, lv_event_t};
-use std::ffi::c_void;
-use std::fmt::Debug;
 
 pub type EventCbWithData<T> = fn(Event, *mut T);
 pub type EventCb = fn(Event);
@@ -92,7 +92,7 @@ impl Event {
     }
 
     pub fn get_event_code(&self) -> EventCode {
-        unsafe { std::mem::transmute(lv_event_get_code(self.lv_event)) }
+        unsafe { core::mem::transmute(lv_event_get_code(self.lv_event)) }
     }
 
     pub unsafe fn get_user_data(&self) -> *mut c_void {
@@ -101,7 +101,7 @@ impl Event {
 }
 
 impl Debug for Event {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "Event: {:?}", self.get_event_code())
     }
 }
@@ -120,6 +120,6 @@ pub unsafe extern "C" fn event_handler_cb_with_data<T>(event: *mut lv_event_t) {
 
 pub unsafe extern "C" fn event_handler_cb(event: *mut lv_event_t) {
     let event = Event::from_raw(event);
-    let func: EventCb = std::mem::transmute(event.get_user_data());
+    let func: EventCb = core::mem::transmute(event.get_user_data());
     func(event);
 }

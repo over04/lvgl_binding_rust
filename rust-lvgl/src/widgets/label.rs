@@ -1,7 +1,7 @@
+use alloc::ffi::CString;
 use rust_lvgl_base::obj::LvObjPtr;
 use rust_lvgl_macro::lvgl_obj;
 use rust_lvgl_sys::lv_label_set_text;
-use std::ffi::CString;
 
 #[lvgl_obj]
 pub struct Label {}

@@ -1,3 +1,4 @@
+use alloc::ffi::CString;
 use rust_lvgl_base::obj::LvObjPtr;
 use rust_lvgl_base::typing::image::{ImageAlign, ImageSrc};
 use rust_lvgl_base::typing::style::BlendMode;
@@ -7,7 +8,6 @@ use rust_lvgl_sys::{
     lv_image_set_offset_x, lv_image_set_offset_y, lv_image_set_pivot, lv_image_set_scale,
     lv_image_set_scale_x, lv_image_set_scale_y, lv_image_set_src,
 };
-use std::ffi::CString;
 
 #[lvgl_obj]
 pub struct Image {
