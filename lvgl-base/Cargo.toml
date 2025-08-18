@@ -1,7 +1,0 @@
-[package]
-name = "lvgl-base"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-lvgl-sys.path = "../lvgl-sys"

@@ -1,0 +1,16 @@
+[package]
+name = "rust-lvgl"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+libc = "0.2"
+rust-lvgl-sys = { path = "../rust-lvgl-sys" }
+rust-lvgl-base = { path = "../rust-lvgl-base" }
+rust-lvgl-macro = { path = "../rust-lvgl-macro" }
+
+
+[features]
+sdl2 = ["rust-lvgl-sys/sdl2"]
+fbdev = []
+evdev = []
