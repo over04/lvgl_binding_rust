@@ -77,6 +77,16 @@ fn main() {
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Can't write bindings!");
+
+    if let Ok(link_dirs) =
+        env::var("LVGL_LINK_DIR").map(|dir| dir.split(",").map(String::from).collect::<Vec<_>>())
+    {
+        for dir in link_dirs {
+            println!("cargo:rustc-link-search={}", dir);
+        }
+    }
+    #[cfg(feature = "sdl2")]
+    println!("cargo:rustc-link-lib=SDL2");
 }
 
 fn add_c_files(build: &mut cc::Build, path: impl AsRef<Path>) {
