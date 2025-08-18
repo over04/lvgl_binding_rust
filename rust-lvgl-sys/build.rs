@@ -2,7 +2,6 @@ use std::env;
 use std::path::{Path, PathBuf};
 
 fn main() {
-    println!("cargo:warning={}", env::var("CARGO_MANIFEST_DIR").unwrap());
     let project_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let shims_dir = project_dir.join("shims");
     let vendor = project_dir.join("vendor");
@@ -30,7 +29,7 @@ fn main() {
         .include(&lv_config_dir);
     cfg.includes(incl_extra.split(','));
 
-    cfg.warnings(false).cargo_warnings(false).compile("lvgl");
+    cfg.warnings(false).compile("lvgl");
 
     let mut cc_args: Vec<String> = vec![
         "-DLV_CONF_INCLUDE_SIMPLE=1".into(),

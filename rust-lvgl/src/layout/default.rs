@@ -55,20 +55,20 @@ impl<'a> DefaultLayout<'a> {
         self
     }
 
-    fn set_x(&mut self, x: i32) -> &mut Self {
+    pub fn set_x(&mut self, x: i32) -> &mut Self {
         unsafe {
             lv_obj_set_x(self.obj.as_mut(), x);
         }
         self
     }
-    fn set_y(&mut self, y: i32) -> &mut Self {
+    pub fn set_y(&mut self, y: i32) -> &mut Self {
         unsafe {
             lv_obj_set_y(self.obj.as_mut(), y);
         }
         self
     }
 
-    fn set_pos(&mut self, x: i32, y: i32) -> &mut Self {
+    pub fn set_pos(&mut self, x: i32, y: i32) -> &mut Self {
         unsafe {
             lv_obj_set_pos(self.obj.as_mut(), x, y);
         }

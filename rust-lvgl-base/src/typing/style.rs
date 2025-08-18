@@ -39,7 +39,7 @@ impl StyleSelector {
     }
 
     pub fn del(&mut self, val: StyleSelectorVal) -> &mut Self {
-        self.val &= !(val.val());
+        self.val &= !val.val();
         self
     }
 }

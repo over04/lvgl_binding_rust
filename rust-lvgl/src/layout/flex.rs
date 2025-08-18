@@ -30,14 +30,14 @@ impl<'a> LvObjLayout<'a> for FlexLayout<'a> {
 impl<'a> LvObjLayoutPad<'a> for FlexLayout<'a> {}
 
 impl<'a> FlexLayout<'a> {
-    fn set_flow(&mut self, flow: FlexFlow) -> &mut Self {
+    pub fn set_flow(&mut self, flow: FlexFlow) -> &mut Self {
         unsafe {
             lv_obj_set_flex_flow(self.obj.as_mut(), flow as _);
         }
         self
     }
 
-    fn set_grow(&mut self, grow: u8) -> &mut Self {
+    pub fn set_grow(&mut self, grow: u8) -> &mut Self {
         unsafe {
             lv_obj_set_flex_grow(self.obj.as_mut(), grow as _);
         }

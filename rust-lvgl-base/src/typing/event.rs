@@ -1,3 +1,5 @@
+#![allow(unsafe_op_in_unsafe_fn)]
+
 use rust_lvgl_sys::{lv_event_get_code, lv_event_get_user_data, lv_event_t};
 use std::ffi::c_void;
 use std::fmt::Debug;
@@ -8,7 +10,7 @@ pub type EventCb = fn(Event);
 #[derive(Debug)]
 #[repr(u32)]
 pub enum EventCode {
-    All,
+    All = 0,
     Pressed,
     Pressing,
     PressLost,
