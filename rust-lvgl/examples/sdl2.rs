@@ -1,3 +1,5 @@
+use rust_lvgl_base::obj::LvObj;
+
 fn main() {
     #[cfg(feature = "sdl2")]
     {
@@ -10,6 +12,7 @@ fn main() {
         let mut display = SDL2Display::create((480, 480));
         SDL2Mouth::create(());
         let mut a = Obj::create(&LvObjLayer::screen_active());
+        a.center();
         LvObjEvent::on_event(&mut a, EventCode::Pressed, |event| {
             println!("{:?}", event);
         });

@@ -1,14 +1,16 @@
-use alloc::boxed::Box;
 use crate::layout::LvObjLayout;
+use crate::typing::align::Align;
 use crate::typing::event::{
     EventCb, EventCbWithData, EventCode, EventData, event_handler_cb, event_handler_cb_with_data,
 };
 use crate::typing::flag::Flag;
+use alloc::boxed::Box;
 use core::ffi::c_void;
 use rust_lvgl_sys::{
-    lv_obj_add_event_cb, lv_obj_add_flag, lv_obj_flag_t, lv_obj_flag_t_LV_OBJ_FLAG_HIDDEN,
-    lv_obj_remove_flag, lv_obj_remove_style_all, lv_obj_set_flag, lv_obj_set_height,
-    lv_obj_set_size, lv_obj_set_width, lv_obj_t,
+    lv_obj_add_event_cb, lv_obj_add_flag, lv_obj_align, lv_obj_align_to, lv_obj_center,
+    lv_obj_flag_t, lv_obj_flag_t_LV_OBJ_FLAG_HIDDEN, lv_obj_remove_flag, lv_obj_remove_style_all,
+    lv_obj_set_align, lv_obj_set_flag, lv_obj_set_height, lv_obj_set_pos, lv_obj_set_size,
+    lv_obj_set_width, lv_obj_set_x, lv_obj_set_y, lv_obj_t,
 };
 
 pub trait LvObjPtr {
@@ -122,6 +124,47 @@ where
     fn remove_style_all(&mut self) -> &mut Self {
         unsafe {
             lv_obj_remove_style_all(self.as_mut());
+        }
+        self
+    }
+
+    fn center(&mut self) -> &mut Self {
+        unsafe { lv_obj_center(self.as_mut()) }
+        self
+    }
+
+    fn set_align(&mut self, align: Align) -> &mut Self {
+        unsafe { lv_obj_set_align(self.as_mut(), align as _) }
+        self
+    }
+
+    /// 相当于set_align + set_pos
+    fn align(&mut self, align: Align, x_ofs: i32, y_ofs: i32) -> &mut Self {
+        unsafe { lv_obj_align(self.as_mut(), align as _, x_ofs, y_ofs) }
+        self
+    }
+
+    fn align_to(&mut self, base: &dyn LvObjPtr, align: Align, x_ofs: i32, y_ofs: i32) -> &mut Self {
+        unsafe { lv_obj_align_to(self.as_mut(), base.as_ptr(), align as _, x_ofs, y_ofs) }
+        self
+    }
+
+    fn set_x(&mut self, x: i32) -> &mut Self {
+        unsafe {
+            lv_obj_set_x(self.as_mut(), x);
+        }
+        self
+    }
+    fn set_y(&mut self, y: i32) -> &mut Self {
+        unsafe {
+            lv_obj_set_y(self.as_mut(), y);
+        }
+        self
+    }
+
+    fn set_pos(&mut self, x: i32, y: i32) -> &mut Self {
+        unsafe {
+            lv_obj_set_pos(self.as_mut(), x, y);
         }
         self
     }

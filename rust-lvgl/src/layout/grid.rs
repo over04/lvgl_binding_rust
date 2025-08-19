@@ -40,7 +40,7 @@ impl<'a> LvObjLayout<'a> for GridLayout<'a> {
 impl<'a> LvObjLayoutPad<'a> for GridLayout<'a> {}
 
 impl GridLayout<'_> {
-    pub fn grid_size_vec_to_dsc(v: Vec<GridSize>) -> Vec<i32> {
+    fn grid_size_vec_to_dsc(v: Vec<GridSize>) -> Vec<i32> {
         let mut v: Vec<_> = v
             .iter()
             .map(|x| match x {
