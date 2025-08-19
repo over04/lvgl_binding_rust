@@ -3,8 +3,9 @@ use core::ffi::c_void;
 use rust_lvgl_base::typing::anim::{AnimCompletedCb, AnimExecCb, AnimRepeat};
 use rust_lvgl_base::typing::anim::{AnimData, AnimSetting};
 use rust_lvgl_sys::{
-    LV_ANIM_REPEAT_INFINITE, lv_anim_get_user_data, lv_anim_set_delay, lv_anim_set_duration,
-    lv_anim_set_repeat_count, lv_anim_set_reverse_duration, lv_anim_set_user_data, lv_anim_set_var,
+    LV_ANIM_REPEAT_INFINITE, lv_anim_get_user_data, lv_anim_init, lv_anim_path_linear,
+    lv_anim_set_delay, lv_anim_set_duration, lv_anim_set_repeat_count,
+    lv_anim_set_reverse_duration, lv_anim_set_user_data, lv_anim_set_values, lv_anim_set_var,
     lv_anim_start, lv_anim_t,
 };
 
@@ -15,10 +16,19 @@ pub struct Anim {
 
 impl Anim {
     pub fn create() -> Self {
+        let mut anim = lv_anim_t::default();
+        anim.path_cb = Some(lv_anim_path_linear); //  不初始化会报错
         Anim {
-            anim: Default::default(),
+            anim,
             setting: AnimSetting::default(),
         }
+    }
+
+    pub fn init(&mut self) -> &mut Self {
+        unsafe {
+            lv_anim_init(&mut self.anim);
+        }
+        self
     }
 
     pub fn on_completed(&mut self, cb: AnimCompletedCb) -> &mut Self {
@@ -55,6 +65,13 @@ impl Anim {
                     lv_anim_set_repeat_count(&mut self.anim, LV_ANIM_REPEAT_INFINITE)
                 }
             }
+        }
+        self
+    }
+
+    pub fn values(&mut self, start: i32, end: i32) -> &mut Self {
+        unsafe {
+            lv_anim_set_values(&mut self.anim, start, end);
         }
         self
     }

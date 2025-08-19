@@ -8,6 +8,7 @@ use syn::{Attribute, Data, Field, Fields, parse_quote};
 #[proc_macro_attribute]
 pub fn lvgl_obj(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut input_struct = syn::parse_macro_input!(item as syn::DeriveInput);
+    input_struct.attrs.push(parse_quote!(#[derive(Clone)]));
     let struct_name = &input_struct.ident;
     let field_token = quote! { pub _lv_obj_ptr: *mut rust_lvgl_sys::lv_obj_t };
     match &mut input_struct.data {

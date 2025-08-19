@@ -1,4 +1,4 @@
-use rust_lvgl_base::obj::LvObj;
+use rust_lvgl::widgets::anim::Anim;
 
 fn main() {
     #[cfg(feature = "sdl2")]
@@ -17,6 +17,10 @@ fn main() {
             println!("{:?}", event);
         });
         let data = Box::leak(Box::new(1));
+        let mut anim = Anim::create();
+        anim.start(a.clone(), |val, obj| {
+            obj.set_x(val);
+        });
 
         unsafe {
             LvObjEventData::on_event(&mut a, EventCode::Released, data, |_, data| {
@@ -35,5 +39,6 @@ fn main() {
         let display = FBDev::create("/dev/fb0");
         let mut indev = EVDev::create((LVIndevType::Pointer, "/dev/input/event0"));
         indev.set_display(&display);
+        display.handle();
     }
 }
