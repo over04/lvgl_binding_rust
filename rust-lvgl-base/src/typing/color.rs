@@ -17,11 +17,26 @@ impl Color {
         }
     }
 
-    pub fn as_lv_color_t(&self) -> rust_lvgl_sys::lv_color_t {
+    pub fn val(&self) -> rust_lvgl_sys::lv_color_t {
         unsafe {
             rust_lvgl_sys::lv_color_hex(
                 (self.r as u32) << 16 | (self.g as u32) << 8 | (self.b as u32),
             )
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub enum Opacity {
+    Val(u8),
+    Pct(u8),
+}
+
+impl Opacity {
+    pub fn val(self) -> u8 {
+        match self {
+            Opacity::Val(val) => val,
+            Opacity::Pct(pct) => ((pct as f32 / 100.) * 255.) as u8,
         }
     }
 }

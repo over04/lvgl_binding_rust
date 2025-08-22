@@ -1,6 +1,7 @@
 use crate::typing::part::Part;
 use crate::typing::state::State;
 
+#[derive(Debug, Clone)]
 pub enum StyleSelectorVal {
     State(State),
     Part(Part),
@@ -16,14 +17,15 @@ pub enum BlendMode {
 }
 
 impl StyleSelectorVal {
-    pub fn val(&self) -> u32 {
+    pub fn val(self) -> u32 {
         match self {
-            StyleSelectorVal::State(val) => *val as u32,
-            StyleSelectorVal::Part(val) => *val as u32,
+            StyleSelectorVal::State(val) => val as u32,
+            StyleSelectorVal::Part(val) => val as u32,
         }
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct StyleSelector {
     pub val: u32,
 }
@@ -33,12 +35,12 @@ impl StyleSelector {
         Self { val: 0 }
     }
 
-    pub fn add(&mut self, val: StyleSelectorVal) -> &mut Self {
+    pub fn add(mut self, val: StyleSelectorVal) -> Self {
         self.val |= val.val();
         self
     }
 
-    pub fn del(&mut self, val: StyleSelectorVal) -> &mut Self {
+    pub fn del(mut self, val: StyleSelectorVal) -> Self {
         self.val &= !val.val();
         self
     }

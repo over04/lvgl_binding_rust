@@ -43,15 +43,6 @@ pub fn lvgl_obj(_attr: TokenStream, item: TokenStream) -> TokenStream {
         }
 
         impl rust_lvgl_base::obj::LvObj for #struct_name {
-            fn create(parent: &dyn rust_lvgl_base::obj::LvObjPtr) -> Self {
-                unsafe {
-                    Self {
-                        _lv_obj_ptr: rust_lvgl_sys::lv_obj_create(parent.as_ptr()),
-                        ..Default::default()
-                    }
-                }
-            }
-
             fn from_raw(raw: *mut rust_lvgl_sys::lv_obj_t) -> Self {
                 Self {
                     _lv_obj_ptr: raw,

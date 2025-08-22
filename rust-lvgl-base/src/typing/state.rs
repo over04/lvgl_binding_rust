@@ -1,4 +1,4 @@
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 #[repr(u32)]
 pub enum State {
     Default = 0x0000,

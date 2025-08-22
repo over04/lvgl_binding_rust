@@ -1,17 +1,20 @@
 use crate::layout::LvObjLayout;
 use crate::typing::align::Align;
+use crate::typing::color::{Color, Opacity};
 use crate::typing::event::{
     EventCb, EventCbWithData, EventCode, EventData, event_handler_cb, event_handler_cb_with_data,
 };
 use crate::typing::flag::Flag;
 use crate::typing::size::Length;
+use crate::typing::style::StyleSelector;
 use alloc::boxed::Box;
 use core::ffi::c_void;
 use rust_lvgl_sys::{
     lv_obj_add_event_cb, lv_obj_add_flag, lv_obj_align, lv_obj_align_to, lv_obj_center,
     lv_obj_flag_t, lv_obj_flag_t_LV_OBJ_FLAG_HIDDEN, lv_obj_remove_flag, lv_obj_remove_style_all,
     lv_obj_set_align, lv_obj_set_flag, lv_obj_set_height, lv_obj_set_pos, lv_obj_set_size,
-    lv_obj_set_width, lv_obj_set_x, lv_obj_set_y, lv_obj_t,
+    lv_obj_set_style_bg_color, lv_obj_set_style_bg_opa, lv_obj_set_style_opa, lv_obj_set_width,
+    lv_obj_set_x, lv_obj_set_y, lv_obj_t,
 };
 
 pub trait LvObjPtr {
@@ -60,11 +63,14 @@ where
     }
 }
 
+pub trait LvObjCreator {
+    fn create(parent: &dyn LvObjPtr) -> Self;
+}
+
 pub trait LvObj
 where
-    Self: LvObjPtr + LvObjEvent + LvObjEventData + Sized,
+    Self: LvObjPtr + LvObjEvent + LvObjEventData + LvObjCreator + Sized,
 {
-    fn create(parent: &dyn LvObjPtr) -> Self;
     fn from_raw(raw: *mut lv_obj_t) -> Self;
 
     fn set_width(&mut self, width: i32) -> &mut Self {
@@ -167,6 +173,21 @@ where
         unsafe {
             lv_obj_set_pos(self.as_mut(), x, y);
         }
+        self
+    }
+
+    fn set_style_bg_opa(&mut self, opacity: Opacity, style: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_bg_opa(self.as_mut(), opacity.val(), style.val) }
+        self
+    }
+
+    fn set_style_bg_color(&mut self, color: Color, style: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_bg_color(self.as_mut(), color.val(), style.val) }
+        self
+    }
+
+    fn set_style_opa(&mut self, opacity: Opacity, style: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_opa(self.as_mut(), opacity.val(), style.val) }
         self
     }
 

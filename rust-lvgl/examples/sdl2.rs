@@ -1,12 +1,12 @@
-use rust_lvgl::widgets::anim::Anim;
-
 fn main() {
     #[cfg(feature = "sdl2")]
     {
         use rust_lvgl::driver::sdl2::{SDL2Display, SDL2Mouth};
         use rust_lvgl::driver::{DisplayDriver, IndevDriver};
         use rust_lvgl::layer::LvObjLayer;
+        use rust_lvgl::widgets::anim::Anim;
         use rust_lvgl::widgets::obj::Obj;
+        use rust_lvgl_base::obj::LvObjCreator;
         use rust_lvgl_base::obj::{LvObj, LvObjEvent, LvObjEventData};
         use rust_lvgl_base::typing::event::EventCode;
         let mut display = SDL2Display::create((480, 480));

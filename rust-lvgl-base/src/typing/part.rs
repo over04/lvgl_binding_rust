@@ -1,4 +1,4 @@
-#[derive(Copy, Clone)]
+#[derive(Debug, Copy, Clone)]
 #[repr(u32)]
 pub enum Part {
     Main = 0x000000,

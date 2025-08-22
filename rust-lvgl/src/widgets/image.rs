@@ -1,10 +1,10 @@
 use alloc::ffi::CString;
-use rust_lvgl_base::obj::LvObjPtr;
+use rust_lvgl_base::obj::{LvObjCreator, LvObjPtr};
 use rust_lvgl_base::typing::image::{ImageAlign, ImageSrc};
 use rust_lvgl_base::typing::style::BlendMode;
 use rust_lvgl_macro::lvgl_obj;
 use rust_lvgl_sys::{
-    lv_image_set_antialias, lv_image_set_blend_mode, lv_image_set_inner_align,
+    lv_image_create, lv_image_set_antialias, lv_image_set_blend_mode, lv_image_set_inner_align,
     lv_image_set_offset_x, lv_image_set_offset_y, lv_image_set_pivot, lv_image_set_scale,
     lv_image_set_scale_x, lv_image_set_scale_y, lv_image_set_src,
 };
@@ -13,24 +13,34 @@ use rust_lvgl_sys::{
 pub struct Image {
     src: Option<ImageSrc>,
 }
+
+impl LvObjCreator for Image {
+    fn create(parent: &dyn LvObjPtr) -> Self {
+        Self {
+            src: None,
+            _lv_obj_ptr: unsafe { lv_image_create(parent.as_ptr()) },
+        }
+    }
+}
+
 impl Image {
     pub fn set_src(&mut self, src: ImageSrc) -> &mut Self {
-        self.src = Some(src.clone());
-        match src {
+        self.src = Some(src);
+        match self.src.as_ref().unwrap() {
             ImageSrc::Path(path) => {
-                let path = CString::new(path).unwrap();
+                let path = CString::new(path.as_str()).unwrap();
                 unsafe {
-                    lv_image_set_src(self.as_mut(), path.as_ptr() as _);
+                    lv_image_set_src(self.as_ptr(), path.into_raw() as _);
                 }
             }
             ImageSrc::Symbol(symbol) => {
-                let symbol = CString::new(symbol).unwrap();
+                let symbol = CString::new(symbol.as_str()).unwrap();
                 unsafe {
-                    lv_image_set_src(self.as_mut(), symbol.as_ptr() as _);
+                    lv_image_set_src(self.as_ptr(), symbol.as_ptr() as _);
                 }
             }
             ImageSrc::Ptr(ptr) => unsafe {
-                lv_image_set_src(self.as_mut(), ptr);
+                lv_image_set_src(self.as_ptr(), *ptr);
             },
         }
         self
