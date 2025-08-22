@@ -4,6 +4,7 @@ use crate::typing::event::{
     EventCb, EventCbWithData, EventCode, EventData, event_handler_cb, event_handler_cb_with_data,
 };
 use crate::typing::flag::Flag;
+use crate::typing::size::Length;
 use alloc::boxed::Box;
 use core::ffi::c_void;
 use rust_lvgl_sys::{
@@ -79,9 +80,9 @@ where
         self
     }
 
-    fn set_size(&mut self, width: i32, height: i32) -> &mut Self {
+    fn set_size(&mut self, width: Length, height: Length) -> &mut Self {
         unsafe {
-            lv_obj_set_size(self.as_mut(), width, height);
+            lv_obj_set_size(self.as_mut(), width.value(), height.value());
         }
         self
     }
