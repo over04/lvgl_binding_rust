@@ -11,13 +11,13 @@ use rust_lvgl_sys::{
 
 #[lvgl_obj]
 pub struct Image {
-    src: Option<ImageSrc>,
+    _temp_src: Option<CString>,
 }
 
 impl LvObjCreator for Image {
     fn create(parent: &dyn LvObjPtr) -> Self {
         Self {
-            src: None,
+            _temp_src: None,
             _lv_obj_ptr: unsafe { lv_image_create(parent.as_ptr()) },
         }
     }
@@ -25,22 +25,18 @@ impl LvObjCreator for Image {
 
 impl Image {
     pub fn set_src(&mut self, src: ImageSrc) -> &mut Self {
-        self.src = Some(src);
-        match self.src.as_ref().unwrap() {
-            ImageSrc::Path(path) => {
-                let path = CString::new(path.as_str()).unwrap();
+        match src {
+            ImageSrc::Path(src) | ImageSrc::Symbol(src) => {
+                self._temp_src = Some(CString::new(src.as_str()).unwrap());
                 unsafe {
-                    lv_image_set_src(self.as_ptr(), path.into_raw() as _);
-                }
-            }
-            ImageSrc::Symbol(symbol) => {
-                let symbol = CString::new(symbol.as_str()).unwrap();
-                unsafe {
-                    lv_image_set_src(self.as_ptr(), symbol.as_ptr() as _);
+                    lv_image_set_src(
+                        self.as_mut(),
+                        self._temp_src.as_ref().unwrap().as_ptr() as _,
+                    );
                 }
             }
             ImageSrc::Ptr(ptr) => unsafe {
-                lv_image_set_src(self.as_ptr(), *ptr);
+                lv_image_set_src(self.as_mut(), ptr);
             },
         }
         self

@@ -4,13 +4,13 @@ use core::ffi::c_void;
 use core::fmt::Debug;
 use rust_lvgl_sys::{lv_event_get_code, lv_event_get_user_data, lv_event_t};
 
-pub type EventCbWithData<T> = fn(Event, *mut T);
+pub type EventCbWithData<T> = fn(Event, &mut T);
 pub type EventCb = fn(Event);
 
 #[derive(Debug)]
 #[repr(u32)]
 pub enum EventCode {
-    All = 0,
+    All,
     Pressed,
     Pressing,
     PressLost,
@@ -115,7 +115,7 @@ pub unsafe extern "C" fn event_handler_cb_with_data<T>(event: *mut lv_event_t) {
     let event = Event::from_raw(event);
     let data = event.get_user_data() as *mut EventData<T>;
     let func = (*data).cb;
-    func(event, (*data).data);
+    func(event, &mut *(*data).data);
 }
 
 pub unsafe extern "C" fn event_handler_cb(event: *mut lv_event_t) {

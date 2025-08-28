@@ -1,3 +1,4 @@
+use crate::widgets::obj::Obj;
 use rust_lvgl_base::obj::{LvObj, LvObjCreator, LvObjPtr};
 use rust_lvgl_base::typing::dir::DirSelector;
 use rust_lvgl_macro::lvgl_obj;
@@ -17,8 +18,8 @@ impl LvObjCreator for TileView {
 }
 
 impl TileView {
-    pub fn create_tile<T: LvObj>(&mut self, col: u8, row: u8, dir: DirSelector) -> T {
-        unsafe { T::from_raw(lv_tileview_add_tile(self.as_mut(), col, row, dir.val)) }
+    pub fn create_tile(&mut self, col: u8, row: u8, dir: DirSelector) -> Obj {
+        unsafe { Obj::from_raw(lv_tileview_add_tile(self.as_mut(), col, row, dir.val)) }
     }
 
     pub fn set_tile(&mut self, tile: &dyn LvObjPtr, anim_enabled: bool) -> &mut Self {

@@ -7,7 +7,7 @@ pub enum Length {
 }
 
 impl Length {
-    pub fn value(self) -> i32 {
+    pub fn val(self) -> i32 {
         match self {
             Length::Pct(val) => unsafe { lv_pct(val) },
             Length::Pix(val) => val,

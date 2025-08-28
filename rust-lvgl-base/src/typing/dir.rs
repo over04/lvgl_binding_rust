@@ -1,5 +1,3 @@
-use crate::typing::style::StyleSelectorVal;
-
 #[derive(Copy, Clone)]
 #[repr(u32)]
 pub enum Dir {
@@ -16,14 +14,19 @@ pub enum Dir {
 pub struct DirSelector {
     pub val: u32,
 }
+
 impl DirSelector {
-    pub fn add(&mut self, val: Dir) -> &mut Self {
+    pub const fn new() -> Self {
+        Self { val: 0 }
+    }
+
+    pub const fn add(mut self, val: Dir) -> Self {
         self.val |= val as u32;
         self
     }
 
-    pub fn del(&mut self, val: StyleSelectorVal) -> &mut Self {
-        self.val &= !val.val();
+    pub const fn del(mut self, val: Dir) -> Self {
+        self.val &= !(val as u32);
         self
     }
 }
