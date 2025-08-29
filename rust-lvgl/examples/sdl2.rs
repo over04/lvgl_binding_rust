@@ -9,6 +9,9 @@ fn main() {
         use rust_lvgl_base::obj::LvObjCreator;
         use rust_lvgl_base::obj::{LvObj, LvObjEvent, LvObjEventData};
         use rust_lvgl_base::typing::event::EventCode;
+        use rust_lvgl_base::typing::size::Length;
+        
+    
         let mut display = SDL2Display::create((480, 480));
         SDL2Mouth::create(());
         let mut a = Obj::create(&LvObjLayer::screen_active());
@@ -19,7 +22,8 @@ fn main() {
         let data = Box::leak(Box::new(1));
         let mut anim = Anim::create();
         anim.start(a.clone(), |val, obj| {
-            obj.set_x(val);
+
+            obj.set_x(Length::Pix(val));
         });
 
         unsafe {
