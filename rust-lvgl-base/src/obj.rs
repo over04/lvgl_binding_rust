@@ -161,22 +161,22 @@ where
         self
     }
 
-    fn set_x(&mut self, x: i32) -> &mut Self {
+    fn set_x(&mut self, x: Length) -> &mut Self {
         unsafe {
-            lv_obj_set_x(self.as_mut(), x);
+            lv_obj_set_x(self.as_mut(), x.val());
         }
         self
     }
-    fn set_y(&mut self, y: i32) -> &mut Self {
+    fn set_y(&mut self, y: Length) -> &mut Self {
         unsafe {
-            lv_obj_set_y(self.as_mut(), y);
+            lv_obj_set_y(self.as_mut(), y.val());
         }
         self
     }
 
-    fn set_pos(&mut self, x: i32, y: i32) -> &mut Self {
+    fn set_pos(&mut self, x: Length, y: Length) -> &mut Self {
         unsafe {
-            lv_obj_set_pos(self.as_mut(), x, y);
+            lv_obj_set_pos(self.as_mut(), x.val(), y.val());
         }
         self
     }
