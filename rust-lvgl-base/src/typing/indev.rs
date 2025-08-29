@@ -1,5 +1,6 @@
+#[derive(Debug, Clone)]
 #[repr(u8)]
-pub enum LVIndevType {
+pub enum IndevType {
     None = 0,
     Pointer,
     Keypad,

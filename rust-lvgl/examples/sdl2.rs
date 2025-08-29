@@ -2,7 +2,7 @@ fn main() {
     #[cfg(feature = "sdl2")]
     {
         use rust_lvgl::driver::sdl2::{SDL2Display, SDL2Mouth};
-        use rust_lvgl::driver::{DisplayDriver, IndevDriver};
+        use rust_lvgl::base::driver::{DisplayDriver, IndevDriver};
         use rust_lvgl::layer::LvObjLayer;
         use rust_lvgl::widgets::anim::Anim;
         use rust_lvgl::widgets::obj::Obj;
@@ -39,7 +39,7 @@ fn main() {
         use lvgl::driver::IndevDriver;
         use lvgl::driver::evdev::EVDev;
         use lvgl::driver::fbdev::FBDev;
-        use rust_lvgl_base::typing::indev::LVIndevType;
+        use rust_lvgl_base::typing::indev::IndevType;
         let display = FBDev::create("/dev/fb0");
         let mut indev = EVDev::create((LVIndevType::Pointer, "/dev/input/event0"));
         indev.set_display(&display);

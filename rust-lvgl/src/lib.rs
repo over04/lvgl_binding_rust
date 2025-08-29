@@ -18,12 +18,3 @@ pub mod macros {
     pub use rust_lvgl_macro::*;
 }
 
-static mut IS_INIT: bool = false;
-pub fn init() {
-    unsafe {
-        if !IS_INIT {
-            rust_lvgl_sys::lv_init();
-            IS_INIT = true;
-        }
-    }
-}

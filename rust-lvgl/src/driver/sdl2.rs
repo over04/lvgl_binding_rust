@@ -1,6 +1,6 @@
 #![cfg(feature = "sdl2")]
 
-use crate::driver::{DisplayDriver, DisplayDriverPtr, IndevDriver};
+use rust_lvgl_base::{driver::{DisplayDriver, DisplayDriverPtr, IndevDriver}, typing::indev::IndevType};
 use rust_lvgl_sys::{
     SDL_GetTicks, lv_display_t, lv_indev_t, lv_sdl_mouse_create, lv_sdl_window_create, lv_tick_inc,
     lv_timer_handler,
@@ -42,6 +42,16 @@ impl DisplayDriver<(i32, i32)> for SDL2Display {
 }
 
 impl IndevDriver<()> for SDL2Mouth {
+    fn from_raw(raw: *mut lv_indev_t, _: IndevType) -> Self {
+        Self {
+            indev: raw
+        }
+    }
+    
+    fn get_type(&self) -> IndevType {
+        IndevType::Pointer
+    }
+    
     fn create(_: ()) -> Self {
         Self {
             indev: unsafe { lv_sdl_mouse_create() },
