@@ -1,10 +1,10 @@
 use alloc::boxed::Box;
 use core::ffi::c_void;
-use rust_lvgl_base::typing::anim::{AnimCompletedCb, AnimExecCb, AnimRepeat};
+use rust_lvgl_base::typing::anim::{AnimCompletedCb, AnimExecCb, AnimPath, AnimRepeat};
 use rust_lvgl_base::typing::anim::{AnimData, AnimSetting};
 use rust_lvgl_sys::{
     LV_ANIM_REPEAT_INFINITE, lv_anim_get_user_data, lv_anim_init, lv_anim_path_linear,
-    lv_anim_set_delay, lv_anim_set_duration, lv_anim_set_repeat_count,
+    lv_anim_set_delay, lv_anim_set_duration, lv_anim_set_path_cb, lv_anim_set_repeat_count,
     lv_anim_set_reverse_duration, lv_anim_set_user_data, lv_anim_set_values, lv_anim_set_var,
     lv_anim_start, lv_anim_t,
 };
@@ -65,6 +65,13 @@ impl Anim {
                     lv_anim_set_repeat_count(&mut self.anim, LV_ANIM_REPEAT_INFINITE)
                 }
             }
+        }
+        self
+    }
+
+    pub fn path_cb(&mut self, path_cb: AnimPath) -> &mut Self {
+        unsafe {
+            lv_anim_set_path_cb(&mut self.anim, path_cb.to_anim_path_cb());
         }
         self
     }

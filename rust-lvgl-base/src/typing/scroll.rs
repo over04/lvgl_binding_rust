@@ -5,3 +5,11 @@ pub enum ScrollBarMode {
     Active,
     Auto,
 }
+
+#[repr(u8)]
+pub enum ScrollSnap {
+    None,
+    Start,
+    End,
+    Center,
+}

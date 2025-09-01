@@ -1,10 +1,12 @@
 use alloc::string::String;
-use core::ffi::c_void;
+use core::{ffi::c_void, fmt::Debug};
+use rust_lvgl_sys::lv_image_dsc_t;
 
 #[derive(Debug, Clone)]
 pub enum ImageSrc {
     Path(String),
     Symbol(String),
+    ImageDsc(ImageDsc),
     Ptr(*mut c_void),
 }
 
@@ -28,4 +30,9 @@ pub enum ImageAlign {
     /// The image keeps its aspect ratio, but is resized to the maximum size that fits within the Widget's area.
     Contain,
     Cover,
+}
+
+#[derive(Debug, Clone)]
+pub struct ImageDsc {
+    pub dsc: *mut lv_image_dsc_t,
 }

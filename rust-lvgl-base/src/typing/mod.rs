@@ -14,3 +14,4 @@ pub mod style;
 pub mod color;
 pub mod scroll;
 pub mod point;
+pub mod snapshot;

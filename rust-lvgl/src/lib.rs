@@ -17,4 +17,3 @@ pub mod sys {
 pub mod macros {
     pub use rust_lvgl_macro::*;
 }
-

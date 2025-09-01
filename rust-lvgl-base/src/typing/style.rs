@@ -17,7 +17,7 @@ pub enum BlendMode {
 }
 
 impl StyleSelectorVal {
-    pub fn val(self) -> u32 {
+    pub const fn val(self) -> u32 {
         match self {
             StyleSelectorVal::State(val) => val as u32,
             StyleSelectorVal::Part(val) => val as u32,
@@ -31,16 +31,16 @@ pub struct StyleSelector {
 }
 
 impl StyleSelector {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self { val: 0 }
     }
 
-    pub fn add(mut self, val: StyleSelectorVal) -> Self {
+    pub const fn add(mut self, val: StyleSelectorVal) -> Self {
         self.val |= val.val();
         self
     }
 
-    pub fn del(mut self, val: StyleSelectorVal) -> Self {
+    pub const fn del(mut self, val: StyleSelectorVal) -> Self {
         self.val &= !val.val();
         self
     }

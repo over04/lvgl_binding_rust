@@ -4,9 +4,9 @@ use rust_lvgl_base::typing::image::{ImageAlign, ImageSrc};
 use rust_lvgl_base::typing::style::BlendMode;
 use rust_lvgl_macro::lvgl_obj;
 use rust_lvgl_sys::{
-    lv_image_create, lv_image_set_antialias, lv_image_set_blend_mode, lv_image_set_inner_align,
-    lv_image_set_offset_x, lv_image_set_offset_y, lv_image_set_pivot, lv_image_set_scale,
-    lv_image_set_scale_x, lv_image_set_scale_y, lv_image_set_src,
+    lv_image_create, lv_image_get_scale, lv_image_set_antialias, lv_image_set_blend_mode,
+    lv_image_set_inner_align, lv_image_set_offset_x, lv_image_set_offset_y, lv_image_set_pivot,
+    lv_image_set_scale, lv_image_set_scale_x, lv_image_set_scale_y, lv_image_set_src,
 };
 
 #[lvgl_obj]
@@ -38,6 +38,9 @@ impl Image {
             ImageSrc::Ptr(ptr) => unsafe {
                 lv_image_set_src(self.as_mut(), ptr);
             },
+            ImageSrc::ImageDsc(dsc) => unsafe {
+                lv_image_set_src(self.as_mut(), dsc.dsc as _);
+            },
         }
         self
     }
@@ -61,6 +64,10 @@ impl Image {
             lv_image_set_pivot(self.as_mut(), x, y);
         }
         self
+    }
+
+    pub fn get_scale(&self) -> i32 {
+        unsafe { lv_image_get_scale(self.as_ptr()) }
     }
 
     pub fn set_scale(&mut self, zoom: u32) -> &mut Self {

@@ -1,6 +1,6 @@
 use alloc::vec;
 use alloc::vec::Vec;
-use rust_lvgl_base::layout::{LvObjLayout, LvObjLayoutPad};
+use rust_lvgl_base::layout::LvObjLayout;
 use rust_lvgl_base::obj::{LvObj, LvObjPtr};
 use rust_lvgl_base::typing::grid::{GridAlign, GridSize};
 use rust_lvgl_sys::{
@@ -37,8 +37,6 @@ impl<'a> LvObjLayout<'a> for GridLayout<'a> {
         }
     }
 }
-
-impl<'a> LvObjLayoutPad<'a> for GridLayout<'a> {}
 
 impl GridLayout<'_> {
     fn grid_size_vec_to_dsc(v: &[GridSize]) -> Box<[i32]> {

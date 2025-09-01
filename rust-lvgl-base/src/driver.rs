@@ -1,4 +1,3 @@
-use alloc::boxed::Box;
 use libc::usleep;
 use rust_lvgl_sys::{
     lv_display_t, lv_indev_active, lv_indev_get_point, lv_indev_set_display, lv_indev_t,
@@ -70,8 +69,8 @@ pub trait IndevDriver<T> {
     fn get_point(&self) -> Option<Point> {
         match self.get_type() {
             IndevType::Pointer => unsafe {
-                let mut point = Box::new(lv_point_t::default());
-                lv_indev_get_point(self.get_indev(), point.as_mut());
+                let mut point = lv_point_t::default();
+                lv_indev_get_point(self.get_indev(), &mut point);
                 Some(Point {
                     x: point.x,
                     y: point.y,

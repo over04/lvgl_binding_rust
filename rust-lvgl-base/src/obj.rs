@@ -6,18 +6,23 @@ use crate::typing::event::{
 };
 use crate::typing::flag::Flag;
 use crate::typing::grid::GridAlign;
-use crate::typing::scroll::ScrollBarMode;
+use crate::typing::scroll::{ScrollBarMode, ScrollSnap};
 use crate::typing::size::Length;
 use crate::typing::style::StyleSelector;
 use alloc::boxed::Box;
 use core::ffi::c_void;
 use rust_lvgl_sys::{
     lv_obj_add_event_cb, lv_obj_add_flag, lv_obj_align, lv_obj_align_to, lv_obj_center,
-    lv_obj_flag_t, lv_obj_flag_t_LV_OBJ_FLAG_HIDDEN, lv_obj_remove_flag, lv_obj_remove_style_all,
-    lv_obj_set_align, lv_obj_set_flag, lv_obj_set_grid_cell, lv_obj_set_height, lv_obj_set_pos,
-    lv_obj_set_scrollbar_mode, lv_obj_set_size, lv_obj_set_style_bg_color, lv_obj_set_style_bg_opa,
-    lv_obj_set_style_opa, lv_obj_set_style_transform_pivot_x, lv_obj_set_style_transform_pivot_y,
-    lv_obj_set_width, lv_obj_set_x, lv_obj_set_y, lv_obj_t,
+    lv_obj_clean, lv_obj_flag_t, lv_obj_flag_t_LV_OBJ_FLAG_HIDDEN, lv_obj_get_child,
+    lv_obj_get_height, lv_obj_get_width, lv_obj_get_x, lv_obj_get_y, lv_obj_move_to_index,
+    lv_obj_remove_flag, lv_obj_remove_style_all, lv_obj_scroll_to_view, lv_obj_set_align,
+    lv_obj_set_flag, lv_obj_set_flex_grow, lv_obj_set_grid_cell, lv_obj_set_height, lv_obj_set_pos,
+    lv_obj_set_scroll_snap_x, lv_obj_set_scrollbar_mode, lv_obj_set_size,
+    lv_obj_set_style_bg_color, lv_obj_set_style_bg_opa, lv_obj_set_style_opa,
+    lv_obj_set_style_pad_bottom, lv_obj_set_style_pad_column, lv_obj_set_style_pad_left,
+    lv_obj_set_style_pad_right, lv_obj_set_style_pad_row, lv_obj_set_style_pad_top,
+    lv_obj_set_style_transform_pivot_x, lv_obj_set_style_transform_pivot_y, lv_obj_set_width,
+    lv_obj_set_x, lv_obj_set_y, lv_obj_t,
 };
 
 pub trait LvObjPtr {
@@ -31,7 +36,7 @@ where
 {
     fn on_event(&mut self, code: EventCode, cb: EventCb) -> &mut Self {
         unsafe {
-        lv_obj_add_event_cb(
+            lv_obj_add_event_cb(
                 self.as_mut(),
                 Some(event_handler_cb),
                 code as _,
@@ -78,17 +83,27 @@ where
     // fn alter(self) -> LvObjAlter<Self> {
     //     LvObjAlter(self, Default::default())
     // }
+
+    fn get_width(&self) -> i32 {
+        unsafe { lv_obj_get_width(self.as_ptr()) }
+    }
+
     fn set_width(&mut self, width: Length) -> &mut Self {
         unsafe {
             lv_obj_set_width(self.as_mut(), width.val());
         }
         self
     }
+
     fn set_height(&mut self, height: Length) -> &mut Self {
         unsafe {
             lv_obj_set_height(self.as_mut(), height.val());
         }
         self
+    }
+
+    fn get_height(&self) -> i32 {
+        unsafe { lv_obj_get_height(self.as_ptr()) }
     }
 
     fn set_size(&mut self, width: Length, height: Length) -> &mut Self {
@@ -161,12 +176,36 @@ where
         self
     }
 
+    fn move_to_index(&mut self, idx: i32) -> &mut Self {
+        unsafe {
+            lv_obj_move_to_index(self.as_mut(), idx);
+        }
+        self
+    }
+
+    /// 清除此obj下所有的子元素
+    fn clean(&mut self) -> &mut Self {
+        unsafe {
+            lv_obj_clean(self.as_mut());
+        }
+        self
+    }
+
+    fn get_x(&self) -> i32 {
+        unsafe { lv_obj_get_x(self.as_ptr()) }
+    }
+
     fn set_x(&mut self, x: Length) -> &mut Self {
         unsafe {
             lv_obj_set_x(self.as_mut(), x.val());
         }
         self
     }
+
+    fn get_y(&self) -> i32 {
+        unsafe { lv_obj_get_y(self.as_ptr()) }
+    }
+
     fn set_y(&mut self, y: Length) -> &mut Self {
         unsafe {
             lv_obj_set_y(self.as_mut(), y.val());
@@ -179,6 +218,17 @@ where
             lv_obj_set_pos(self.as_mut(), x.val(), y.val());
         }
         self
+    }
+
+    fn set_flex_grow(&mut self, grow: u8) -> &mut Self {
+        unsafe {
+            lv_obj_set_flex_grow(self.as_mut(), grow);
+        }
+        self
+    }
+
+    fn layout<'a, T: LvObjLayout<'a>>(&'a mut self) -> T {
+        T::create(self)
     }
 
     fn set_style_bg_opa(&mut self, opacity: Opacity, style: StyleSelector) -> &mut Self {
@@ -243,8 +293,55 @@ where
         self
     }
 
-    fn layout<'a, T: LvObjLayout<'a>>(&'a mut self) -> T {
-        T::create(self)
+    fn set_scroll_snap_x(&mut self, snap: ScrollSnap) -> &mut Self {
+        unsafe {
+            lv_obj_set_scroll_snap_x(self.as_mut(), snap as _);
+        }
+        self
+    }
+
+    fn set_style_pad_column(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_column(self.as_mut(), val, selector.val) }
+        self
+    }
+
+    fn set_style_pad_row(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_row(self.as_mut(), val, selector.val) }
+        self
+    }
+
+    fn set_style_pad_left(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_left(self.as_mut(), val, selector.val) }
+        self
+    }
+
+    fn set_style_pad_right(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_right(self.as_mut(), val, selector.val) }
+        self
+    }
+
+    fn set_style_pad_top(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_top(self.as_mut(), val, selector.val) }
+        self
+    }
+
+    fn set_style_pad_bottom(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_bottom(self.as_mut(), val, selector.val) }
+        self
+    }
+}
+
+pub struct ObjUtil;
+
+impl ObjUtil {
+    pub fn scroll_to_view(to: &dyn LvObjPtr, anim_en: bool) {
+        unsafe {
+            lv_obj_scroll_to_view(to.as_ptr(), anim_en);
+        }
+    }
+
+    pub unsafe fn get_child<T: LvObj>(parent: &dyn LvObjPtr, idx: i32) -> T {
+        T::from_raw(unsafe { lv_obj_get_child(parent.as_ptr(), idx) })
     }
 }
 
