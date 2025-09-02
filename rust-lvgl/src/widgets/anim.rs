@@ -83,7 +83,7 @@ impl Anim {
         self
     }
 
-    pub fn start<V>(&mut self, var: V, exec_cb: AnimExecCb<V>) {
+    pub fn start<V>(&mut self, var: V, exec_cb: AnimExecCb<V>) -> &mut Self {
         let setting = Box::leak(Box::new(self.setting.clone()));
         let data = Box::leak(Box::new(AnimData {
             exec_cb,
@@ -97,6 +97,7 @@ impl Anim {
             lv_anim_set_var(&mut self.anim, data as _);
             lv_anim_start(&mut self.anim);
         }
+        self
     }
 }
 

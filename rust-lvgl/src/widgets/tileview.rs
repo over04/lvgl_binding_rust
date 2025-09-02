@@ -1,5 +1,4 @@
-use crate::widgets::obj::Obj;
-use rust_lvgl_base::obj::{LvObj, LvObjCreator, LvObjPtr};
+use rust_lvgl_base::obj::{LvObj, LvObjCreator, LvObjPtr, Obj};
 use rust_lvgl_base::typing::dir::DirSelector;
 use rust_lvgl_macro::lvgl_obj;
 use rust_lvgl_sys::{

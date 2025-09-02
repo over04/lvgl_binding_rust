@@ -51,6 +51,7 @@ pub fn lvgl_obj(_attr: TokenStream, item: TokenStream) -> TokenStream {
             }
         }
 
+        impl rust_lvgl_base::obj::LvAsObj for #struct_name {}
         impl rust_lvgl_base::obj::LvObjEvent for #struct_name {}
         impl rust_lvgl_base::obj::LvObjEventData for #struct_name {}
     };

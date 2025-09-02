@@ -1,5 +1,4 @@
-use crate::widgets::obj::Obj;
-use rust_lvgl_base::obj::LvObj;
+use rust_lvgl_base::{obj::LvObj, obj::Obj};
 use rust_lvgl_sys::{lv_layer_bottom, lv_layer_sys, lv_layer_top, lv_screen_active};
 
 pub struct LvObjLayer;

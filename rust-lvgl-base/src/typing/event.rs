@@ -2,7 +2,11 @@
 
 use core::ffi::c_void;
 use core::fmt::Debug;
-use rust_lvgl_sys::{lv_event_get_code, lv_event_get_user_data, lv_event_t};
+use rust_lvgl_sys::{
+    lv_event_get_code, lv_event_get_target_obj, lv_event_get_user_data, lv_event_t,
+};
+
+use crate::obj::{LvObj, Obj};
 
 pub type EventCbWithData<T> = fn(Event, &mut T);
 pub type EventCb = fn(Event);
@@ -82,6 +86,7 @@ pub enum EventCode {
     MarkedDeleting = 0x10000,
 }
 
+#[derive(Debug)]
 pub struct Event {
     lv_event: *mut lv_event_t,
 }
@@ -91,18 +96,16 @@ impl Event {
         Self { lv_event }
     }
 
-    pub fn get_event_code(&self) -> EventCode {
+    pub fn get_code(&self) -> EventCode {
         unsafe { core::mem::transmute(lv_event_get_code(self.lv_event)) }
     }
 
     pub unsafe fn get_user_data(&self) -> *mut c_void {
         lv_event_get_user_data(self.lv_event)
     }
-}
 
-impl Debug for Event {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(f, "Event: {:?}", self.get_event_code())
+    pub fn get_target(&self) -> Obj {
+        Obj::from_raw(unsafe { lv_event_get_target_obj(self.lv_event) })
     }
 }
 

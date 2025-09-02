@@ -13,16 +13,19 @@ use alloc::boxed::Box;
 use core::ffi::c_void;
 use rust_lvgl_sys::{
     lv_obj_add_event_cb, lv_obj_add_flag, lv_obj_align, lv_obj_align_to, lv_obj_center,
-    lv_obj_clean, lv_obj_flag_t, lv_obj_flag_t_LV_OBJ_FLAG_HIDDEN, lv_obj_get_child,
-    lv_obj_get_height, lv_obj_get_width, lv_obj_get_x, lv_obj_get_y, lv_obj_move_to_index,
-    lv_obj_remove_flag, lv_obj_remove_style_all, lv_obj_scroll_to_view, lv_obj_set_align,
-    lv_obj_set_flag, lv_obj_set_flex_grow, lv_obj_set_grid_cell, lv_obj_set_height, lv_obj_set_pos,
+    lv_obj_clean, lv_obj_create, lv_obj_delete, lv_obj_delete_async, lv_obj_flag_t,
+    lv_obj_flag_t_LV_OBJ_FLAG_HIDDEN, lv_obj_get_child, lv_obj_get_height, lv_obj_get_width,
+    lv_obj_get_x, lv_obj_get_y, lv_obj_move_to_index, lv_obj_remove_flag, lv_obj_remove_style_all,
+    lv_obj_scroll_to_view, lv_obj_set_align, lv_obj_set_flag, lv_obj_set_flex_grow,
+    lv_obj_set_grid_cell, lv_obj_set_height, lv_obj_set_parent, lv_obj_set_pos,
     lv_obj_set_scroll_snap_x, lv_obj_set_scrollbar_mode, lv_obj_set_size,
     lv_obj_set_style_bg_color, lv_obj_set_style_bg_opa, lv_obj_set_style_opa,
     lv_obj_set_style_pad_bottom, lv_obj_set_style_pad_column, lv_obj_set_style_pad_left,
     lv_obj_set_style_pad_right, lv_obj_set_style_pad_row, lv_obj_set_style_pad_top,
-    lv_obj_set_style_transform_pivot_x, lv_obj_set_style_transform_pivot_y, lv_obj_set_width,
-    lv_obj_set_x, lv_obj_set_y, lv_obj_t,
+    lv_obj_set_style_transform_pivot_x, lv_obj_set_style_transform_pivot_y,
+    lv_obj_set_style_transform_scale_x, lv_obj_set_style_transform_scale_y,
+    lv_obj_set_style_translate_x, lv_obj_set_style_translate_y, lv_obj_set_width, lv_obj_set_x,
+    lv_obj_set_y, lv_obj_t,
 };
 
 pub trait LvObjPtr {
@@ -251,20 +254,69 @@ where
         self
     }
 
-    fn set_transform_pivot_x(&mut self, x: i32, style: StyleSelector) -> &mut Self {
-        unsafe { lv_obj_set_style_transform_pivot_x(self.as_mut(), x, style.val) }
+    fn set_style_transform_pivot_x(&mut self, x: Length, style: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_transform_pivot_x(self.as_mut(), x.val(), style.val) }
         self
     }
 
-    fn set_transform_pivot_y(&mut self, y: i32, style: StyleSelector) -> &mut Self {
-        unsafe { lv_obj_set_style_transform_pivot_y(self.as_mut(), y, style.val) }
+    fn set_style_transform_pivot_y(&mut self, y: Length, style: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_transform_pivot_y(self.as_mut(), y.val(), style.val) }
         self
     }
 
-    fn set_transform_pivot_pos(&mut self, x: i32, y: i32, style: StyleSelector) -> &mut Self {
+    fn set_style_transform_pivot_pos(
+        &mut self,
+        x: Length,
+        y: Length,
+        style: StyleSelector,
+    ) -> &mut Self {
         unsafe {
-            lv_obj_set_style_transform_pivot_x(self.as_mut(), x, style.val);
-            lv_obj_set_style_transform_pivot_y(self.as_mut(), y, style.val);
+            lv_obj_set_style_transform_pivot_x(self.as_mut(), x.val(), style.val);
+            lv_obj_set_style_transform_pivot_y(self.as_mut(), y.val(), style.val);
+        }
+        self
+    }
+
+    fn set_style_translate_x(&mut self, x: Length, style: StyleSelector) -> &mut Self {
+        unsafe {
+            lv_obj_set_style_translate_x(self.as_mut(), x.val(), style.val);
+        }
+        self
+    }
+
+    fn set_style_translate_y(&mut self, y: Length, style: StyleSelector) -> &mut Self {
+        unsafe {
+            lv_obj_set_style_translate_y(self.as_mut(), y.val(), style.val);
+        }
+        self
+    }
+
+    fn set_style_translate(&mut self, x: Length, y: Length, style: StyleSelector) -> &mut Self {
+        unsafe {
+            lv_obj_set_style_translate_x(self.as_mut(), x.val(), style.val);
+            lv_obj_set_style_translate_y(self.as_mut(), y.val(), style.val);
+        }
+        self
+    }
+
+    fn set_style_transform_scale_x(&mut self, zoom: i32, style: StyleSelector) -> &mut Self {
+        unsafe {
+            lv_obj_set_style_transform_scale_x(self.as_mut(), zoom, style.val);
+        }
+        self
+    }
+
+    fn set_style_transform_scale_y(&mut self, zoom: i32, style: StyleSelector) -> &mut Self {
+        unsafe {
+            lv_obj_set_style_transform_scale_y(self.as_mut(), zoom, style.val);
+        }
+        self
+    }
+
+    fn set_style_transform_scale(&mut self, scale: i32, style: StyleSelector) -> &mut Self {
+        unsafe {
+            lv_obj_set_style_transform_scale_x(self.as_mut(), scale, style.val);
+            lv_obj_set_style_transform_scale_y(self.as_mut(), scale, style.val);
         }
         self
     }
@@ -329,6 +381,22 @@ where
         unsafe { lv_obj_set_style_pad_bottom(self.as_mut(), val, selector.val) }
         self
     }
+
+    fn set_parent(&mut self, parent: &dyn LvObjPtr) -> &mut Self {
+        unsafe {
+            lv_obj_set_parent(self.as_mut(), parent.as_ptr());
+        }
+        self
+    }
+}
+
+pub trait LvAsObj
+where
+    Self: LvObjPtr,
+{
+    fn as_obj(&self) -> Obj {
+        Obj::from_raw(self.as_ptr())
+    }
 }
 
 pub struct ObjUtil;
@@ -342,6 +410,50 @@ impl ObjUtil {
 
     pub unsafe fn get_child<T: LvObj>(parent: &dyn LvObjPtr, idx: i32) -> T {
         T::from_raw(unsafe { lv_obj_get_child(parent.as_ptr(), idx) })
+    }
+
+    pub fn delete(target: &dyn LvObjPtr) {
+        unsafe {
+            lv_obj_delete(target.as_ptr());
+        }
+    }
+
+    pub fn delete_async(target: &dyn LvObjPtr) {
+        unsafe {
+            lv_obj_delete_async(target.as_ptr());
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Obj {
+    _lv_obj_ptr: *mut lv_obj_t,
+}
+
+impl LvObjCreator for Obj {
+    fn create(parent: &dyn LvObjPtr) -> Self {
+        Self {
+            _lv_obj_ptr: unsafe { lv_obj_create(parent.as_ptr()) },
+        }
+    }
+}
+
+impl LvObjPtr for Obj {
+    fn as_ptr(&self) -> *mut lv_obj_t {
+        self._lv_obj_ptr
+    }
+
+    fn as_mut(&mut self) -> *mut lv_obj_t {
+        self._lv_obj_ptr
+    }
+}
+
+impl LvObjEvent for Obj {}
+impl LvObjEventData for Obj {}
+
+impl LvObj for Obj {
+    fn from_raw(raw: *mut lv_obj_t) -> Self {
+        Self { _lv_obj_ptr: raw }
     }
 }
 

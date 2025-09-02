@@ -33,7 +33,7 @@ pub enum Opacity {
 }
 
 impl Opacity {
-    pub fn val(self) -> u8 {
+    pub const fn val(self) -> u8 {
         match self {
             Opacity::Val(val) => val,
             Opacity::Pct(pct) => ((pct as f32 / 100.) * 255.) as u8,
