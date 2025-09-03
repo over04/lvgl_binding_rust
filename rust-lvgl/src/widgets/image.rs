@@ -26,7 +26,7 @@ impl LvObjCreator for Image {
 impl Image {
     pub fn set_src(&mut self, src: ImageSrc) -> &mut Self {
         match src {
-            ImageSrc::Path(src) | ImageSrc::Symbol(src) => {
+            ImageSrc::Path(src) => {
                 self._temp_src = Some(CString::new(src.as_str()).unwrap());
                 unsafe {
                     lv_image_set_src(
@@ -35,6 +35,9 @@ impl Image {
                     );
                 }
             }
+            ImageSrc::Symbol(src) => unsafe {
+                lv_image_set_src(self.as_mut(), src.as_ptr() as _);
+            },
             ImageSrc::Ptr(ptr) => unsafe {
                 lv_image_set_src(self.as_mut(), ptr);
             },

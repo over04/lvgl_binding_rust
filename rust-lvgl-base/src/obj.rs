@@ -9,6 +9,7 @@ use crate::typing::grid::GridAlign;
 use crate::typing::scroll::{ScrollBarMode, ScrollSnap};
 use crate::typing::size::Length;
 use crate::typing::style::StyleSelector;
+use crate::typing::text::TextAlign;
 use alloc::boxed::Box;
 use core::ffi::c_void;
 use rust_lvgl_sys::{
@@ -22,10 +23,10 @@ use rust_lvgl_sys::{
     lv_obj_set_style_bg_color, lv_obj_set_style_bg_opa, lv_obj_set_style_opa,
     lv_obj_set_style_pad_bottom, lv_obj_set_style_pad_column, lv_obj_set_style_pad_left,
     lv_obj_set_style_pad_right, lv_obj_set_style_pad_row, lv_obj_set_style_pad_top,
-    lv_obj_set_style_transform_pivot_x, lv_obj_set_style_transform_pivot_y,
-    lv_obj_set_style_transform_scale_x, lv_obj_set_style_transform_scale_y,
-    lv_obj_set_style_translate_x, lv_obj_set_style_translate_y, lv_obj_set_width, lv_obj_set_x,
-    lv_obj_set_y, lv_obj_t,
+    lv_obj_set_style_radius, lv_obj_set_style_text_align, lv_obj_set_style_transform_pivot_x,
+    lv_obj_set_style_transform_pivot_y, lv_obj_set_style_transform_scale_x,
+    lv_obj_set_style_transform_scale_y, lv_obj_set_style_translate_x, lv_obj_set_style_translate_y,
+    lv_obj_set_width, lv_obj_set_x, lv_obj_set_y, lv_obj_t,
 };
 
 pub trait LvObjPtr {
@@ -352,39 +353,53 @@ where
         self
     }
 
-    fn set_style_pad_column(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
-        unsafe { lv_obj_set_style_pad_column(self.as_mut(), val, selector.val) }
+    fn set_style_pad_column(&mut self, val: Length, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_column(self.as_mut(), val.val(), selector.val) }
         self
     }
 
-    fn set_style_pad_row(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
-        unsafe { lv_obj_set_style_pad_row(self.as_mut(), val, selector.val) }
+    fn set_style_pad_row(&mut self, val: Length, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_row(self.as_mut(), val.val(), selector.val) }
         self
     }
 
-    fn set_style_pad_left(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
-        unsafe { lv_obj_set_style_pad_left(self.as_mut(), val, selector.val) }
+    fn set_style_pad_left(&mut self, val: Length, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_left(self.as_mut(), val.val(), selector.val) }
         self
     }
 
-    fn set_style_pad_right(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
-        unsafe { lv_obj_set_style_pad_right(self.as_mut(), val, selector.val) }
+    fn set_style_pad_right(&mut self, val: Length, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_right(self.as_mut(), val.val(), selector.val) }
         self
     }
 
-    fn set_style_pad_top(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
-        unsafe { lv_obj_set_style_pad_top(self.as_mut(), val, selector.val) }
+    fn set_style_pad_top(&mut self, val: Length, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_top(self.as_mut(), val.val(), selector.val) }
         self
     }
 
-    fn set_style_pad_bottom(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
-        unsafe { lv_obj_set_style_pad_bottom(self.as_mut(), val, selector.val) }
+    fn set_style_pad_bottom(&mut self, val: Length, selector: StyleSelector) -> &mut Self {
+        unsafe { lv_obj_set_style_pad_bottom(self.as_mut(), val.val(), selector.val) }
+        self
+    }
+
+    fn set_style_text_align(&mut self, align: TextAlign, style: StyleSelector) -> &mut Self {
+        unsafe {
+            lv_obj_set_style_text_align(self.as_mut(), align as _, style.val);
+        }
         self
     }
 
     fn set_parent(&mut self, parent: &dyn LvObjPtr) -> &mut Self {
         unsafe {
             lv_obj_set_parent(self.as_mut(), parent.as_ptr());
+        }
+        self
+    }
+
+    fn set_radius(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
+        unsafe {
+            lv_obj_set_style_radius(self.as_mut(), val, selector.val);
         }
         self
     }

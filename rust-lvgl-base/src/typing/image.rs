@@ -5,7 +5,7 @@ use rust_lvgl_sys::lv_image_dsc_t;
 #[derive(Debug, Clone)]
 pub enum ImageSrc {
     Path(String),
-    Symbol(String),
+    Symbol(&'static [u8; 4]),
     ImageDsc(ImageDsc),
     Ptr(*mut c_void),
 }

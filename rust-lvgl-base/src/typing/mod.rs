@@ -15,3 +15,5 @@ pub mod color;
 pub mod scroll;
 pub mod point;
 pub mod snapshot;
+pub mod text;
+pub mod label;
