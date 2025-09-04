@@ -1,3 +1,4 @@
+use crate::font::Font;
 use crate::layout::LvObjLayout;
 use crate::typing::align::Align;
 use crate::typing::color::{Color, Opacity};
@@ -23,10 +24,11 @@ use rust_lvgl_sys::{
     lv_obj_set_style_bg_color, lv_obj_set_style_bg_opa, lv_obj_set_style_opa,
     lv_obj_set_style_pad_bottom, lv_obj_set_style_pad_column, lv_obj_set_style_pad_left,
     lv_obj_set_style_pad_right, lv_obj_set_style_pad_row, lv_obj_set_style_pad_top,
-    lv_obj_set_style_radius, lv_obj_set_style_text_align, lv_obj_set_style_transform_pivot_x,
-    lv_obj_set_style_transform_pivot_y, lv_obj_set_style_transform_scale_x,
-    lv_obj_set_style_transform_scale_y, lv_obj_set_style_translate_x, lv_obj_set_style_translate_y,
-    lv_obj_set_width, lv_obj_set_x, lv_obj_set_y, lv_obj_t,
+    lv_obj_set_style_radius, lv_obj_set_style_text_align, lv_obj_set_style_text_font,
+    lv_obj_set_style_transform_pivot_x, lv_obj_set_style_transform_pivot_y,
+    lv_obj_set_style_transform_scale_x, lv_obj_set_style_transform_scale_y,
+    lv_obj_set_style_translate_x, lv_obj_set_style_translate_y, lv_obj_set_width, lv_obj_set_x,
+    lv_obj_set_y, lv_obj_t,
 };
 
 pub trait LvObjPtr {
@@ -400,6 +402,13 @@ where
     fn set_radius(&mut self, val: i32, selector: StyleSelector) -> &mut Self {
         unsafe {
             lv_obj_set_style_radius(self.as_mut(), val, selector.val);
+        }
+        self
+    }
+
+    fn set_style_font(&mut self, font: &Font, selector: StyleSelector) -> &mut Self {
+        unsafe {
+            lv_obj_set_style_text_font(self.as_mut(), font.as_ptr(), selector.val);
         }
         self
     }

@@ -6,3 +6,7 @@ edition = "2024"
 [dependencies]
 rust-lvgl-sys = { path = "../rust-lvgl-sys" }
 libc = "0.2"
+
+[features]
+tiny_ttf = []
+tiny_ttf_file = ["tiny_ttf"]

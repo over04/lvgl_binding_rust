@@ -14,3 +14,5 @@ rust-lvgl-macro = { path = "../rust-lvgl-macro" }
 sdl2 = ["rust-lvgl-sys/sdl2"]
 fbdev = []
 evdev = []
+tiny_ttf = ["rust-lvgl-sys/tiny_ttf", "rust-lvgl-base/tiny_ttf"]
+tiny_ttf_file = ["rust-lvgl-sys/tiny_ttf_file", "rust-lvgl-base/tiny_ttf_file"]

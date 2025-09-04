@@ -4,3 +4,4 @@ pub mod layout;
 pub mod obj;
 pub mod typing;
 pub mod driver;
+pub mod font;
