@@ -8,8 +8,15 @@ use crate::typing::{indev::IndevType, point::Point};
 
 static mut IS_INIT: bool = false;
 
-pub trait DisplayDriverPtr {
+pub trait DisplayDriverBase {
     fn get_display(&self) -> *mut lv_display_t;
+    fn handle(&mut self) {
+        loop {
+            unsafe {
+                usleep(lv_timer_handler());
+            }
+        }
+    }
 }
 
 pub struct LvDisplayDriver;
@@ -27,21 +34,13 @@ impl LvDisplayDriver {
 
 pub trait DisplayDriver<T>
 where
-    Self: DisplayDriverPtr + Sized,
+    Self: DisplayDriverBase + Sized,
 {
     fn _create(val: T) -> Self;
 
     fn create(val: T) -> Self {
         LvDisplayDriver::init();
         Self::_create(val)
-    }
-
-    fn handle(&mut self) {
-        loop {
-            unsafe {
-                usleep(lv_timer_handler());
-            }
-        }
     }
 }
 
@@ -59,7 +58,7 @@ pub trait IndevDriver<T> {
     fn get_indev(&self) -> *mut lv_indev_t;
     fn get_type(&self) -> IndevType;
 
-    fn set_display(&mut self, display: &dyn DisplayDriverPtr) -> &mut Self {
+    fn set_display(&mut self, display: &dyn DisplayDriverBase) -> &mut Self {
         unsafe {
             lv_indev_set_display(self.get_indev(), display.get_display());
         }
