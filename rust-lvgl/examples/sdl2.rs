@@ -1,7 +1,7 @@
 fn main() {
     #[cfg(feature = "sdl2")]
     {
-        use rust_lvgl::base::driver::{DisplayDriver, IndevDriver};
+        use rust_lvgl::base::driver::{DisplayDriver, DisplayDriverBase, IndevDriver};
         use rust_lvgl::driver::sdl2::{SDL2Display, SDL2Mouth};
         use rust_lvgl::layer::LvObjLayer;
         use rust_lvgl::widgets::anim::Anim;
