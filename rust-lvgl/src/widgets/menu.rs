@@ -1,5 +1,6 @@
 use std::{ffi::CString, ptr::null_mut};
 
+use libc::c_char;
 use rust_lvgl_base::obj::{LvObj, LvObjCreator, LvObjPtr, Obj};
 use rust_lvgl_macro::lvgl_obj;
 use rust_lvgl_sys::{
@@ -44,7 +45,7 @@ impl LvMenuCreator for Menu {}
 
 impl Menu {
     pub fn page_create(&self, title: Option<&str>) -> MenuPage {
-        let title = title.map(|f| CString::new(f).unwrap().into_raw());
+        let title: Option<*mut c_char> = title.map(|f| CString::new(f).unwrap().into_raw());
         let page = MenuPage {
             _title: title,
             _lv_obj_ptr: unsafe { lv_menu_page_create(self.as_ptr(), title.unwrap_or(null_mut())) },
@@ -86,7 +87,7 @@ impl Menu {
 
 #[lvgl_obj]
 pub struct MenuPage {
-    _title: Option<*mut i8>,
+    _title: Option<*mut c_char>,
 }
 
 impl LvMenuCreator for MenuPage {}
