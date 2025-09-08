@@ -1,6 +1,6 @@
 #![cfg(feature = "fbdev")]
 
-use crate::driver::{DisplayDriver, DisplayDriverPtr};
+use rust_lvgl_base::driver::{DisplayDriver, DisplayDriverBase};
 use rust_lvgl_sys::{lv_display_t, lv_linux_fbdev_create, lv_linux_fbdev_set_file};
 use std::ffi::CString;
 
@@ -8,7 +8,7 @@ pub struct FBDev {
     display: *mut lv_display_t,
 }
 
-impl DisplayDriverPtr for FBDev {
+impl DisplayDriverBase for FBDev {
     fn get_display(&self) -> *mut lv_display_t {
         self.display
     }

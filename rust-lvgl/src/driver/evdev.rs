@@ -1,6 +1,6 @@
 #![cfg(feature = "evdev")]
-use crate::driver::IndevDriver;
-use rust_lvgl_base::typing::indev::IndevType;
+
+use rust_lvgl_base::{driver::IndevDriver, typing::indev::IndevType};
 use rust_lvgl_sys::{lv_evdev_create, lv_indev_t};
 use std::ffi::CString;
 
@@ -14,10 +14,10 @@ impl IndevDriver<(IndevType, &str)> for EVDev {
         Self { indev: raw, t }
     }
 
-    fn create(val: (LVIndevType, &str)) -> Self {
+    fn create(val: (IndevType, &str)) -> Self {
         let path = CString::new(val.1).unwrap();
         unsafe {
-            let indev = lv_evdev_create(val.0 as _, path.as_ptr());
+            let indev = lv_evdev_create(val.0.clone() as _, path.as_ptr());
             Self { indev, t: val.0 }
         }
     }

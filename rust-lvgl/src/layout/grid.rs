@@ -79,7 +79,7 @@ impl GridLayout<'_> {
         row_pos: i32,
         row_pan: i32,
     ) -> T {
-        let mut obj = T::create(self);
+        let mut obj = T::from_raw(self.as_ptr());
         unsafe {
             lv_obj_set_grid_cell(
                 obj.as_mut(),

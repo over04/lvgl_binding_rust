@@ -11,10 +11,8 @@ static mut IS_INIT: bool = false;
 pub trait DisplayDriverBase {
     fn get_display(&self) -> *mut lv_display_t;
     fn handle(&mut self) {
-        loop {
-            unsafe {
-                usleep(lv_timer_handler());
-            }
+        unsafe {
+            usleep(lv_timer_handler());
         }
     }
 }

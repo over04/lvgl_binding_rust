@@ -1,7 +1,8 @@
 pub mod anim;
+pub mod button;
 pub mod image;
 pub mod label;
-pub mod tileview;
+pub mod list;
 pub mod menu;
 pub mod switch;
-pub mod list;
+pub mod tileview;

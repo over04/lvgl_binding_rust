@@ -5,7 +5,7 @@ use rust_lvgl_base::{
     typing::image::ImageSrc,
 };
 use rust_lvgl_macro::lvgl_obj;
-use rust_lvgl_sys::{lv_list_add_button, lv_list_create, lv_obj_create};
+use rust_lvgl_sys::{lv_list_add_button, lv_list_create};
 
 #[lvgl_obj]
 pub struct List {}
@@ -45,13 +45,4 @@ impl List {
 pub struct ListButton {
     _temp_src: Option<CString>,
     _text: CString,
-}
-
-impl LvObjCreator for ListButton {
-    fn create(parent: &dyn LvObjPtr) -> Self {
-        Self {
-            _lv_obj_ptr: unsafe { lv_obj_create(parent.as_ptr()) },
-            ..Default::default()
-        }
-    }
 }

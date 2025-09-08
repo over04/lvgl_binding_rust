@@ -28,6 +28,9 @@ fn main() {
                 println!("{}", *data);
             });
         }
+        loop {
+            display.handle();
+        }
         //
         //
         // unsafe {
@@ -61,18 +64,15 @@ fn main() {
         //     lv_label_set_text(label2, CString::new("1234").unwrap().into_raw());
         //     lv_menu_set_load_page_event(menu, cont1, main_page);
         // }
-
-        display.handle();
     }
     #[cfg(all(feature = "fbdev", feature = "evdev"))]
     {
-        use lvgl::driver::DisplayDriver;
-        use lvgl::driver::IndevDriver;
-        use lvgl::driver::evdev::EVDev;
-        use lvgl::driver::fbdev::FBDev;
+        use rust_lvgl::driver::evdev::EVDev;
+        use rust_lvgl::driver::fbdev::FBDev;
+        use rust_lvgl_base::driver::{DisplayDriver, DisplayDriverBase, IndevDriver};
         use rust_lvgl_base::typing::indev::IndevType;
-        let display = FBDev::create("/dev/fb0");
-        let mut indev = EVDev::create((LVIndevType::Pointer, "/dev/input/event0"));
+        let mut display = FBDev::create("/dev/fb0");
+        let mut indev = EVDev::create((IndevType::Pointer, "/dev/input/event0"));
         indev.set_display(&display);
         display.handle();
     }

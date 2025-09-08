@@ -1,6 +1,6 @@
 use rust_lvgl_sys::lv_pct;
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub enum Length {
     Pct(i32),
     Pix(i32),

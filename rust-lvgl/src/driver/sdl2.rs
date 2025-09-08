@@ -11,6 +11,7 @@ use rust_lvgl_sys::{
 
 pub struct SDL2Display {
     display: *mut lv_display_t,
+    last_tick: Option<u32>,
 }
 
 pub struct SDL2Mouth {
@@ -24,13 +25,10 @@ impl DisplayDriverBase for SDL2Display {
 
     fn handle(&mut self) {
         unsafe {
-            let mut last_tick = SDL_GetTicks();
-            loop {
-                let current_tick = SDL_GetTicks();
-                lv_tick_inc(current_tick - last_tick);
-                last_tick = current_tick;
-                lv_timer_handler();
-            }
+            let current_tick = SDL_GetTicks();
+            lv_tick_inc(current_tick - self.last_tick.unwrap_or(SDL_GetTicks()));
+            lv_timer_handler();
+            self.last_tick = Some(current_tick);
         }
     }
 }
@@ -39,6 +37,7 @@ impl DisplayDriver<(i32, i32)> for SDL2Display {
         unsafe {
             Self {
                 display: lv_sdl_window_create(val.0, val.1),
+                last_tick: None,
             }
         }
     }
