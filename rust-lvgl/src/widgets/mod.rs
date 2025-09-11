@@ -1,8 +1,11 @@
 pub mod anim;
 pub mod button;
 pub mod image;
+pub mod keyboard;
 pub mod label;
 pub mod list;
 pub mod menu;
+pub mod msgbox;
 pub mod switch;
+pub mod textarea;
 pub mod tileview;
