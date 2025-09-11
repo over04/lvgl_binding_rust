@@ -420,7 +420,7 @@ where
         self
     }
 
-    fn get_parent(&mut self) -> Obj {
+    fn get_parent(&self) -> Obj {
         Obj::from_raw(unsafe { lv_obj_get_parent(self.as_ptr()) })
     }
 }
