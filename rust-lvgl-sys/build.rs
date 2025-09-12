@@ -70,6 +70,11 @@ fn main() {
         .derive_default(true)
         .layout_tests(false)
         .use_core()
+        .blocklist_item("FP_ZERO")
+        .blocklist_item("FP_SUBNORMAL")
+        .blocklist_item("FP_NORMAL")
+        .blocklist_item("FP_INFINITE")
+        .blocklist_item("FP_NAN")
         .clang_args(&cc_args)
         .generate()
         .expect("Unable to generate bindings");
