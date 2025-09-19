@@ -3,8 +3,8 @@ use std::ffi::{CStr, CString};
 use rust_lvgl_base::obj::LvObjPtr;
 use rust_lvgl_macro::lvgl_obj;
 use rust_lvgl_sys::{
-    lv_textarea_add_char, lv_textarea_create, lv_textarea_get_text, lv_textarea_set_password_mode,
-    lv_textarea_set_text,
+    lv_textarea_add_char, lv_textarea_add_text, lv_textarea_create, lv_textarea_get_text,
+    lv_textarea_set_one_line, lv_textarea_set_password_mode, lv_textarea_set_text,
 };
 
 #[lvgl_obj]
@@ -51,6 +51,21 @@ impl TextArea {
     pub fn add_char(&mut self, ch: char) -> &mut Self {
         unsafe {
             lv_textarea_add_char(self.as_mut(), ch as _);
+        }
+        self
+    }
+
+    pub fn add_text(&mut self, text: &str) -> &mut Self {
+        unsafe {
+            let text = CString::new(text).unwrap();
+            lv_textarea_add_text(self.as_mut(), text.as_ptr());
+        }
+        self
+    }
+
+    pub fn set_one_line(&mut self, enable: bool) -> &mut Self {
+        unsafe {
+            lv_textarea_set_one_line(self.as_mut(), enable);
         }
         self
     }
