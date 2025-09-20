@@ -6,6 +6,7 @@ pub mod label;
 pub mod list;
 pub mod menu;
 pub mod msgbox;
+pub mod slider;
 pub mod switch;
 pub mod textarea;
 pub mod tileview;

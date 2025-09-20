@@ -1,14 +1,11 @@
 use std::{ffi::CString, ptr::null_mut};
 
-use rust_lvgl_base::{
-    obj::{LvObj, LvObjPtr, Obj},
-    typing::image::ImageSrc,
-};
+use rust_lvgl_base::obj::{LvObj, LvObjPtr, Obj};
 use rust_lvgl_macro::lvgl_obj;
 use rust_lvgl_sys::{
-    lv_msgbox_add_close_button, lv_msgbox_add_footer_button, lv_msgbox_add_header_button,
-    lv_msgbox_add_text, lv_msgbox_add_title, lv_msgbox_close, lv_msgbox_create,
-    lv_msgbox_get_content, lv_msgbox_get_footer, lv_msgbox_get_header, lv_msgbox_get_title,
+    lv_msgbox_add_close_button, lv_msgbox_add_footer_button, lv_msgbox_add_text,
+    lv_msgbox_add_title, lv_msgbox_close, lv_msgbox_create, lv_msgbox_get_content,
+    lv_msgbox_get_footer, lv_msgbox_get_header, lv_msgbox_get_title,
 };
 
 use crate::widgets::{button::Button, label::Label};
