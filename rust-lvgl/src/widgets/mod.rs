@@ -6,6 +6,8 @@ pub mod label;
 pub mod list;
 pub mod menu;
 pub mod msgbox;
+#[cfg(feature = "qrcode")]
+pub mod qrcode;
 pub mod slider;
 pub mod switch;
 pub mod textarea;

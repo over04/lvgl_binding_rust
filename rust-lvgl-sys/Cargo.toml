@@ -9,6 +9,7 @@ edition = "2024"
 sdl2 = []
 tiny_ttf = []
 tiny_ttf_file = ["tiny_ttf"]
+qrcode = []
 
 [build-dependencies]
 cc = "1.2.30"
