@@ -6,6 +6,7 @@ pub mod label;
 pub mod list;
 pub mod menu;
 pub mod msgbox;
+pub mod pinyin;
 #[cfg(feature = "qrcode")]
 pub mod qrcode;
 pub mod slider;
