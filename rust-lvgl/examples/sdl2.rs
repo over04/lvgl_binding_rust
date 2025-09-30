@@ -14,6 +14,12 @@ fn main() {
         // });
         #[cfg(feature = "lottie")]
         {
+            use rust_lvgl::{layer::LvObjLayer, widgets::lottie::Lottie};
+            use rust_lvgl_base::{
+                obj::{LvObj, LvObjCreator},
+                typing::size::Length,
+            };
+
             let mut lottie = Lottie::create(&LvObjLayer::screen_active());
             lottie
                 .set_buffer(1024, 1024, 2)
