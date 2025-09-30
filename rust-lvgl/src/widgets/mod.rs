@@ -4,6 +4,8 @@ pub mod image;
 pub mod keyboard;
 pub mod label;
 pub mod list;
+#[cfg(feature = "lottie")]
+pub mod lottie;
 pub mod menu;
 pub mod msgbox;
 #[cfg(feature = "pinyin")]

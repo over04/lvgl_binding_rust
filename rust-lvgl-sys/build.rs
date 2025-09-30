@@ -19,9 +19,15 @@ fn main() {
     }
 
     let mut cfg = cc::Build::new();
+    let mut cfg_cpp = cc::Build::new();
+
     add_c_files(&mut cfg, &lvgl_src);
     add_c_files(&mut cfg, &lv_config_dir);
     add_c_files(&mut cfg, &shims_dir);
+
+    add_cpp_files(&mut cfg_cpp, &lvgl_src);
+    add_cpp_files(&mut cfg_cpp, &lv_config_dir);
+    add_cpp_files(&mut cfg_cpp, &shims_dir);
 
     cfg.define("LV_CONF_INCLUDE_SIMPLE", Some("1"))
         .include(&lvgl_src)
@@ -29,7 +35,15 @@ fn main() {
         .include(&lv_config_dir);
     cfg.includes(incl_extra.split(','));
 
+    cfg_cpp
+        .define("LV_CONF_INCLUDE_SIMPLE", Some("1"))
+        .include(&lvgl_src)
+        .include(&vendor)
+        .include(&lv_config_dir);
+    cfg_cpp.includes(incl_extra.split(','));
+
     cfg.warnings(false).compile("lvgl");
+    cfg_cpp.cpp(true).warnings(false).compile("lvgl_cpp");
 
     let mut cc_args: Vec<String> = vec![
         "-DLV_CONF_INCLUDE_SIMPLE=1".into(),
@@ -101,6 +115,18 @@ fn add_c_files(build: &mut cc::Build, path: impl AsRef<Path>) {
         if e.file_type().unwrap().is_dir() {
             add_c_files(build, e.path());
         } else if path.extension().and_then(|s| s.to_str()) == Some("c") {
+            build.file(&path);
+        }
+    }
+}
+
+fn add_cpp_files(build: &mut cc::Build, path: impl AsRef<Path>) {
+    for e in path.as_ref().read_dir().unwrap() {
+        let e = e.unwrap();
+        let path = e.path();
+        if e.file_type().unwrap().is_dir() {
+            add_cpp_files(build, e.path());
+        } else if path.extension().and_then(|s| s.to_str()) == Some("cpp") {
             build.file(&path);
         }
     }

@@ -3,34 +3,23 @@ fn main() {
     {
         use rust_lvgl::base::driver::{DisplayDriver, DisplayDriverBase, IndevDriver};
         use rust_lvgl::driver::sdl2::{SDL2Display, SDL2Mouth};
-        use rust_lvgl::layer::LvObjLayer;
-        use rust_lvgl::widgets::anim::Anim;
-        use rust_lvgl::widgets::label::Label;
-        use rust_lvgl_base::obj::{LvObj, LvObjEvent, LvObjEventData};
-        use rust_lvgl_base::obj::{LvObjCreator, Obj};
-        use rust_lvgl_base::typing::event::EventCode;
-        use rust_lvgl_base::typing::size::Length;
 
         let mut display = SDL2Display::create((480, 480));
         SDL2Mouth::create(());
-        let mut a = Obj::create(&LvObjLayer::screen_active());
-        let mut lable = Label::create(&a);
-        lable.set_text("2333");
-        a.center();
-        LvObjEvent::on_event(&mut a, EventCode::Pressed, |event| {
-            println!("{:?}", event);
-        });
-        let data = Box::leak(Box::new(1));
-        let mut anim = Anim::create();
-        anim.duration(2000).values(0, 100);
-        anim.start(a.clone(), |val, obj| {
-            obj.set_x(Length::Pix(val));
-        });
-
-        unsafe {
-            LvObjEventData::on_event(&mut a, EventCode::Released, data, |_, data| {
-                println!("{}", *data);
-            });
+        // let mut lable = Label::create(&a);
+        // lable.set_text("2333");
+        // a.center();
+        // LvObjEvent::on_event(&mut a, EventCode::Pressed, |event| {
+        //     println!("{:?}", event);
+        // });
+        #[cfg(feature = "lottie")]
+        {
+            let mut lottie = Lottie::create(&LvObjLayer::screen_active());
+            lottie
+                .set_buffer(1024, 1024, 2)
+                .set_src_file("/Users/over04/Downloads/lottie.json")
+                .set_scale(64)
+                .set_size(Length::Pct(100), Length::Pct(100));
         }
         loop {
             display.handle();
