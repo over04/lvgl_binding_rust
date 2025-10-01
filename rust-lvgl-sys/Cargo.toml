@@ -12,6 +12,7 @@ tiny_ttf_file = ["tiny_ttf"]
 qrcode = []
 pinyin = []
 lottie = []
+gif = []
 
 [build-dependencies]
 cc = "1.2.30"

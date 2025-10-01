@@ -1,5 +1,7 @@
 pub mod anim;
 pub mod button;
+#[cfg(feature = "gif")]
+pub mod gif;
 pub mod image;
 pub mod keyboard;
 pub mod label;
