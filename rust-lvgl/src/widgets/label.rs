@@ -1,3 +1,5 @@
+use std::ffi::CStr;
+
 use alloc::ffi::CString;
 use rust_lvgl_base::obj::{LvObjCreator, LvObjPtr};
 use rust_lvgl_base::typing::color::Color;
@@ -6,7 +8,8 @@ use rust_lvgl_base::typing::style::StyleSelector;
 
 use rust_lvgl_macro::lvgl_obj;
 use rust_lvgl_sys::{
-    lv_label_create, lv_label_set_long_mode, lv_label_set_text, lv_obj_set_style_text_color,
+    lv_label_create, lv_label_get_text, lv_label_set_long_mode, lv_label_set_text,
+    lv_obj_set_style_text_color,
 };
 
 #[lvgl_obj]
@@ -38,5 +41,14 @@ impl Label {
             lv_label_set_long_mode(self.as_mut(), mode as _);
         }
         self
+    }
+
+    pub fn get_text(&self) -> String {
+        unsafe {
+            CStr::from_ptr(lv_label_get_text(self.as_ptr()))
+                .to_str()
+                .unwrap_or_default()
+                .to_string()
+        }
     }
 }
