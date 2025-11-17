@@ -1,10 +1,9 @@
 use libc::usleep;
 use rust_lvgl_sys::{
-    lv_display_t, lv_indev_active, lv_indev_get_point, lv_indev_set_display, lv_indev_t,
-    lv_point_t, lv_timer_handler,
+    lv_display_t, lv_indev_active, lv_indev_get_gesture_dir, lv_indev_get_point, lv_indev_set_display, lv_indev_t, lv_point_t, lv_timer_handler
 };
 
-use crate::typing::{indev::IndevType, point::Point};
+use crate::typing::{indev::{GestureDir, IndevType}, point::Point};
 
 static mut IS_INIT: bool = false;
 
@@ -76,6 +75,12 @@ pub trait IndevDriver<T> {
             _ => None,
         }
     }
+
+    fn get_gesture_dir(&self) -> GestureDir {
+        let dir = unsafe { lv_indev_get_gesture_dir(self.get_indev()) } as u8;
+        GestureDir::from_bits(dir)
+    }
+
 }
 
 pub struct IndevDriverObj {
